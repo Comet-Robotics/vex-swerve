@@ -2,7 +2,7 @@
 #define __SUBSYSTEMS_SWERVE_MODULE_H__
 
 #include "constants.h"
-#include "api.h"
+#include "pros/motors.hpp"
 #include "utils/PID.h"
 #include <cmath>
 #include <array>
@@ -12,9 +12,10 @@ using namespace constants::drivetrain;
 class SwerveModule {
 public:
     SwerveModule(int8_t topMotorPort, int8_t bottomMotorPort) :   
-    rotationPID(0, 0, 0, 0),
-    topMotor(topMotorPort, CHASSIS_INTERNAL_GEARSET),
-    bottomMotor(bottomMotorPort, CHASSIS_INTERNAL_GEARSET) {
+                    rotationPID(0, 0, 0, 0),
+                    topMotor(topMotorPort, CHASSIS_INTERNAL_GEARSET),
+                    bottomMotor(bottomMotorPort, CHASSIS_INTERNAL_GEARSET) 
+    {
         topMotor.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
         bottomMotor.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
     }
