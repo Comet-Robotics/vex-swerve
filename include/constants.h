@@ -34,12 +34,13 @@ namespace constants {
     namespace drivetrain {
         inline constexpr auto CHASSIS_INTERNAL_GEARSET = pros::v5::MotorGears::blue;
 
-        inline constexpr int TRACK_WIDHT = 0;
         inline constexpr int WHEEL_DIAMETER = 0;
         
         inline pros::Imu IMU(ports::IMU_PORT);
 
         inline constexpr double ROTATION_FACTOR = 1;
+        inline constexpr double TRACK_LENGTH = 0.0; // distance between front and back wheels
+        inline constexpr double TRACK_WIDTH = 0.0; // distance between left and right wheels
 
         inline constexpr std::array<double, 3> FRONT_LEFT_PID = {
             0.0, 

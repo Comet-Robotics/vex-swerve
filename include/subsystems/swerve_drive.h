@@ -1,47 +1,40 @@
-#ifndef __SUBSYSTEMS_SWERVE_MODULE_H__
-#define __SUBSYSTEMS_SWERVE_MODULE_H__
+#ifndef __SUBSYSTEMS_SWERVE_DRIVE_H__
+#define __SUBSYSTEMS_SWERVE_DRIVE_H__
 
-#include "constants.h"
-#include "pros/adi.hpp"
+#define _USE_MATH_DEFINES
+
 #include "swerve_module.h"
 #include <cmath>
 
 using namespace constants::drivetrain;
-class SwerveModule
-{
 
+class SwerveDrive {
 public:
-    SwerveModule(int8_t topMotorPort, int8_t bottomMotorPort)
-        : topMotor(topMotorPort, CHASSIS_INTERNAL_GEARSET),
-          bottomMotor(bottomMotorPort, CHASSIS_INTERNAL_GEARSET)
+    SwerveDrive() : 
+        frontRight(std::make_unique<SwerveModule>(constants::ports::FRONT_RIGHT_PORTS[0], constants::ports::FRONT_RIGHT_PORTS[1])),
+        frontLeft(std::make_unique<SwerveModule>(constants::ports::FRONT_LEFT_PORTS[0], constants::ports::FRONT_LEFT_PORTS[1])),
+        backLeft(std::make_unique<SwerveModule>(constants::ports::BACK_LEFT_PORTS[0], constants::ports::BACK_LEFT_PORTS[1])),
+        backRight(std::make_unique<SwerveModule>(constants::ports::BACK_RIGHT_PORTS[0], constants::ports::BACK_RIGHT_PORTS[1])) 
     {
-        topMotor = pros::Motor(topMotorPort, CHASSIS_INTERNAL_GEARSET);
-        bottomMotor = pros::Motor(bottomMotorPort, CHASSIS_INTERNAL_GEARSET);
-        topMotor.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-        bottomMotor.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-    }
-    
-    void setModuleSpeeds(double translationX, double translationY, double rotation)
-    {
-        double a = translationX - rotation * TRACK_LENGTH / 2;
-        double b = translationX + rotation * TRACK_LENGTH / 2;
-        double c = translationY - rotation * TRACK_WIDTH / 2;
-        double d = translationY + rotation * TRACK_WIDTH / 2;
-
-        frontRight->setSpeedAndAngle(sqrt(b*b + c*c), atan2(b, c) * 180 / pi);
-        frontLeft->setSpeedAndAngle(sqrt(b*b + d*d), atan2(b, d) * 180 / pi);
-        backLeft->setSpeedAndAngle(sqrt(a*a + d*d), atan2(a, d) * 180 / pi);
-        backRight->setSpeedAndAngle(sqrt(a*a + c*c), atan2(a, c) * 180 / pi);
-
+        frontRight->setPID(constants::drivetrain::FRONT_RIGHT_PID);
+        frontLeft->setPID(constants::drivetrain::FRONT_LEFT_PID);
+        backLeft->setPID(constants::drivetrain::BACK_LEFT_PID);
+        backRight->setPID(constants::drivetrain::BACK_RIGHT_PID);
     }
 
-    void setConstants()
-    {
-        frontRight->setPID()
+    void setModuleSpeeds(double forward, double strafe, double rotation) {
+        double a = strafe - rotation * TRACK_LENGTH / 2.0;
+        double b = strafe + rotation * TRACK_LENGTH / 2.0;
+        double c = forward - rotation * TRACK_WIDTH / 2.0;
+        double d = forward + rotation * TRACK_WIDTH / 2.0;
+
+        frontRight->setSpeedAndAngle(hypot(b, c), atan2(b, c) * 180.0 / M_PI);
+        frontLeft->setSpeedAndAngle(hypot(b, d), atan2(b, d) * 180.0 / M_PI);
+        backLeft->setSpeedAndAngle(hypot(a, d), atan2(a, d) * 180.0 / M_PI);
+        backRight->setSpeedAndAngle(hypot(a, c), atan2(a, c) * 180.0 / M_PI);
     }
 
-    void loop()
-    {
+    void loop() {
         frontRight->loop();
         frontLeft->loop();
         backLeft->loop();
@@ -49,7 +42,7 @@ public:
     }
 
 private:
-    SwerveModule frontLeft, frontRight, backLeft, backRight;
+    std::unique_ptr<SwerveModule> frontRight, frontLeft, backLeft, backRight;
 };
 
 #endif

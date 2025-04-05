@@ -3,13 +3,19 @@
 #include "pros/misc.hpp"
 #include "tasks/teleop.h"
 #include "constants.h"
+#include "subsystems.h"
 
 using namespace pros;
 
 void opcontrol_initialize() {}
 
 static void drivebase_controls(Controller &controller) {
-    
+    double forward = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) / 127.0;
+    double strafe = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_X) / 127.0;
+    double rotation = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X) / 127.0;
+
+    drivebase->setModuleSpeeds(forward, strafe, rotation);
+    drivebase->loop();
 }
 
 /**
