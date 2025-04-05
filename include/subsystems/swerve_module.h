@@ -20,7 +20,7 @@ public:
     }
 
     double getModuleRotation() const {
-        return ROTATION_FACTOR * (topMotor.get_position() + bottomMotor.get_position());
+        return ROTATION_FACTOR * (topMotor.get_position() - bottomMotor.get_position());
     }
 
     void setSpeed(double speed) {
@@ -59,7 +59,8 @@ public:
     }
 
     void loop() {
-        double currentAngle = getModuleRotation();
+        double currentAngle = fmod(getModuleRotation(), 360.0);
+        if (currentAngle < 0) currentAngle += 360.0;
         double rotationPower = rotationPID.calculate(currentAngle, angle);
 
         double topPower = speed + rotationPower;
