@@ -2,7 +2,6 @@
 #include "pros/misc.h"
 #include "pros/misc.hpp"
 #include "tasks/teleop.h"
-#include "constants.h"
 #include "subsystems.h"
 
 using namespace pros;
