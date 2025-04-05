@@ -10,12 +10,12 @@ using namespace constants::drivetrain;
 
 class SwerveDrive {
 public:
-    SwerveDrive() : 
-        frontRight(std::make_unique<SwerveModule>(constants::ports::FRONT_RIGHT_PORTS[0], constants::ports::FRONT_RIGHT_PORTS[1])),
-        frontLeft(std::make_unique<SwerveModule>(constants::ports::FRONT_LEFT_PORTS[0], constants::ports::FRONT_LEFT_PORTS[1])),
-        backLeft(std::make_unique<SwerveModule>(constants::ports::BACK_LEFT_PORTS[0], constants::ports::BACK_LEFT_PORTS[1])),
-        backRight(std::make_unique<SwerveModule>(constants::ports::BACK_RIGHT_PORTS[0], constants::ports::BACK_RIGHT_PORTS[1])) 
-    {
+    SwerveDrive(bool fieldCentric) : 
+    frontRight(std::make_unique<SwerveModule>(constants::ports::FRONT_RIGHT_PORTS[0], constants::ports::FRONT_RIGHT_PORTS[1])),
+    frontLeft(std::make_unique<SwerveModule>(constants::ports::FRONT_LEFT_PORTS[0], constants::ports::FRONT_LEFT_PORTS[1])),
+    backLeft(std::make_unique<SwerveModule>(constants::ports::BACK_LEFT_PORTS[0], constants::ports::BACK_LEFT_PORTS[1])),
+    backRight(std::make_unique<SwerveModule>(constants::ports::BACK_RIGHT_PORTS[0], constants::ports::BACK_RIGHT_PORTS[1])),
+    fieldCentric(fieldCentric) {
         frontRight->setPID(constants::drivetrain::FRONT_RIGHT_PID);
         frontLeft->setPID(constants::drivetrain::FRONT_LEFT_PID);
         backLeft->setPID(constants::drivetrain::BACK_LEFT_PID);
@@ -23,6 +23,14 @@ public:
     }
 
     void setModuleSpeeds(double forward, double strafe, double rotation) {
+        if (fieldCentric) {
+            double angle = constants::drivetrain::IMU.get_rotation() * M_PI / 180.0;
+            double newStrafe = strafe * cos(angle) - forward * sin(angle);
+            double newForward = forward * cos(angle) + strafe * sin(angle);
+            strafe = newStrafe;
+            forward = newForward;
+        }
+
         double a = strafe - rotation * TRACK_LENGTH / 2.0;
         double b = strafe + rotation * TRACK_LENGTH / 2.0;
         double c = forward - rotation * TRACK_WIDTH / 2.0;
@@ -43,6 +51,7 @@ public:
 
 private:
     std::unique_ptr<SwerveModule> frontRight, frontLeft, backLeft, backRight;
+    bool fieldCentric;
 };
 
 #endif

@@ -11,10 +11,10 @@ using namespace constants::drivetrain;
 
 class SwerveModule {
 public:
-    SwerveModule(int8_t topMotorPort, int8_t bottomMotorPort)
-        : rotationPID(0, 0, 0, 0),
-          topMotor(topMotorPort, CHASSIS_INTERNAL_GEARSET),
-          bottomMotor(bottomMotorPort, CHASSIS_INTERNAL_GEARSET) {
+    SwerveModule(int8_t topMotorPort, int8_t bottomMotorPort) :   
+    rotationPID(0, 0, 0, 0),
+    topMotor(topMotorPort, CHASSIS_INTERNAL_GEARSET),
+    bottomMotor(bottomMotorPort, CHASSIS_INTERNAL_GEARSET) {
         topMotor.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
         bottomMotor.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
     }
@@ -78,6 +78,7 @@ public:
 private:
     pros::Motor topMotor;
     pros::Motor bottomMotor;
+    bool fieldCentric;
     PID rotationPID;
 
     double speed = 0;
