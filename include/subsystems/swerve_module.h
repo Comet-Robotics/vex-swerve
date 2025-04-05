@@ -77,8 +77,7 @@ public:
     }
 
 private:
-    pros::Motor topMotor;
-    pros::Motor bottomMotor;
+    pros::Motor topMotor, bottomMotor;
     bool fieldCentric;
     PID rotationPID;
 
