@@ -44,7 +44,7 @@ public:
         rotationPID.setCoefficients(coefficients[0], coefficients[1], coefficients[2]);
     }
 
-    void loop() {
+    void update() {
         double currentAngle = fmod(getModuleRotation(), 360.0);
         if (currentAngle < 0) currentAngle += 360.0;
         double rotationPower = rotationPID.calculate(currentAngle, angle);

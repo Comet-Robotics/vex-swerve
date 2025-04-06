@@ -42,11 +42,12 @@ public:
         backRight->setSpeedAndAngle(hypot(a, c), atan2(a, c) * 180.0 / M_PI);
     }
 
-    void loop() {
-        frontRight->loop();
-        frontLeft->loop();
-        backLeft->loop();
-        backRight->loop();
+    void update() {
+        frontRight->update();
+        frontLeft->update();
+        backLeft->update();
+        backRight->update();
+    }
     }
 
 private:
