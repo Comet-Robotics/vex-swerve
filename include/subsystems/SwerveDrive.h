@@ -25,7 +25,7 @@ public:
 
     void setModuleSpeeds(double forward, double strafe, double rotation) {
         if (fieldCentric) {
-            double angle = constants::drivetrain::IMU.get_rotation() * M_PI / 180.0;
+            double angle = AngleUtils::toRadians(constants::drivetrain::IMU.get_rotation());
             double newStrafe = strafe * cos(angle) - forward * sin(angle);
             double newForward = forward * cos(angle) + strafe * sin(angle);
             strafe = newStrafe;
