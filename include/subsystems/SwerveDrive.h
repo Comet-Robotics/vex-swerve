@@ -3,20 +3,19 @@
 
 #define _USE_MATH_DEFINES
 
-#include "swerve_module.h"
+#include "SwerveModule.h"
 #include <cmath>
 
 using namespace constants::drivetrain;
 
 class SwerveDrive {
 public:
-    SwerveDrive(bool fieldOriented) : 
-                frontRight(std::make_unique<SwerveModule>(constants::ports::FRONT_RIGHT_PORTS[0], constants::ports::FRONT_RIGHT_PORTS[1])),
-                frontLeft(std::make_unique<SwerveModule>(constants::ports::FRONT_LEFT_PORTS[0], constants::ports::FRONT_LEFT_PORTS[1])),
-                backLeft(std::make_unique<SwerveModule>(constants::ports::BACK_LEFT_PORTS[0], constants::ports::BACK_LEFT_PORTS[1])),
-                backRight(std::make_unique<SwerveModule>(constants::ports::BACK_RIGHT_PORTS[0], constants::ports::BACK_RIGHT_PORTS[1])),
-                fieldCentric(fieldOriented) 
-    {
+    SwerveDrive(bool fieldCentric) : 
+    frontRight(std::make_unique<SwerveModule>(constants::ports::FRONT_RIGHT_PORTS[0], constants::ports::FRONT_RIGHT_PORTS[1])),
+    frontLeft(std::make_unique<SwerveModule>(constants::ports::FRONT_LEFT_PORTS[0], constants::ports::FRONT_LEFT_PORTS[1])),
+    backLeft(std::make_unique<SwerveModule>(constants::ports::BACK_LEFT_PORTS[0], constants::ports::BACK_LEFT_PORTS[1])),
+    backRight(std::make_unique<SwerveModule>(constants::ports::BACK_RIGHT_PORTS[0], constants::ports::BACK_RIGHT_PORTS[1])),
+    fieldCentric(fieldCentric) {
         frontRight->setPID(constants::drivetrain::FRONT_RIGHT_PID);
         frontLeft->setPID(constants::drivetrain::FRONT_LEFT_PID);
         backLeft->setPID(constants::drivetrain::BACK_LEFT_PID);
