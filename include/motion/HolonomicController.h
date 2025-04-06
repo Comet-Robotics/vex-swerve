@@ -3,7 +3,7 @@
 
 #include "utils/AngleUtils.h"
 #include <cmath>
-#include <iostream>
+#include <cstdio>
 #include <functional>
 
 struct Pose2D {
@@ -67,9 +67,10 @@ private:
     std::function<void(double, double, double)> commandCallback;
 
     void logError(const Pose2D& currentPose, const Pose2D& targetPose) {
-        std::cout << "[Tracking] ΔX: " << (targetPose.x - currentPose.x)
-                  << ", ΔY: " << (targetPose.y - currentPose.y)
-                  << ", Δθ: " << (targetPose.heading - currentPose.heading) << std::endl;
+        printf("[Tracking] ΔX: %.2f, ΔY: %.2f, Δθ: %.2f\n", 
+               targetPose.x - currentPose.x, 
+               targetPose.y - currentPose.y, 
+               targetPose.heading - currentPose.heading);
     }
 };
 
