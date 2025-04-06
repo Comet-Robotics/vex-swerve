@@ -13,6 +13,10 @@ static void drivebase_controls(Controller &controller) {
     double strafe = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_X) / 127.0;
     double rotation = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X) / 127.0;
 
+    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) {
+        drivebase->tareIMU();
+    }
+
     drivebase->setModuleSpeeds(forward, strafe, rotation);
     drivebase->update();
 }
@@ -32,6 +36,7 @@ static void drivebase_controls(Controller &controller) {
  */
 void opcontrol() {
     Controller controller(pros::E_CONTROLLER_MASTER);
+    drivebase->setAutonomous(false);
 
     while (true) {
         pros::lcd::print(0, "Battery: %2.3f V", pros::battery::get_voltage() / 1000.0f);

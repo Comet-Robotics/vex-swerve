@@ -50,6 +50,10 @@ public:
         backRight->update();
     }
 
+    void tareIMU() {
+        constants::drivetrain::IMU.tare();
+    }
+
 private:
     std::unique_ptr<SwerveModule> frontRight, frontLeft, backLeft, backRight;
     bool fieldCentric;
