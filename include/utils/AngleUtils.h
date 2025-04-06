@@ -37,6 +37,14 @@ namespace AngleUtils {
         }
     }
 
+    inline double toRadians(double degrees) {
+        return degrees * M_PI / 180.0;
+    }
+
+    inline double toDegrees(double radians) {
+        return radians * 180.0 / M_PI;
+    }
+
 }
 
 #endif
