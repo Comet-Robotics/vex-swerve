@@ -5,6 +5,7 @@
 
 #include "SwerveModule.h"
 #include <cmath>
+#include "motion/HolonomicController.h"
 
 using namespace constants::drivetrain;
 
@@ -42,16 +43,19 @@ public:
         backRight->setSpeedAndAngle(hypot(a, c), atan2(a, c) * 180.0 / M_PI);
     }
 
-    void loop() {
-        frontRight->loop();
-        frontLeft->loop();
-        backLeft->loop();
-        backRight->loop();
+    void update() {
+        frontRight->update();
+        frontLeft->update();
+        backLeft->update();
+        backRight->update();
     }
 
 private:
     std::unique_ptr<SwerveModule> frontRight, frontLeft, backLeft, backRight;
     bool fieldCentric;
+    bool autonomous = false;
+
+    HolonomicController controller{0.5, 0.5};
 };
 
 #endif

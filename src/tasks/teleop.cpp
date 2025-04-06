@@ -14,7 +14,7 @@ static void drivebase_controls(Controller &controller) {
     double rotation = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X) / 127.0;
 
     drivebase->setModuleSpeeds(forward, strafe, rotation);
-    drivebase->loop();
+    drivebase->update();
 }
 
 /**
