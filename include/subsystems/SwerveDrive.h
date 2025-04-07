@@ -1,6 +1,7 @@
 #ifndef __SUBSYSTEMS_SWERVE_DRIVE_H__
 #define __SUBSYSTEMS_SWERVE_DRIVE_H__
 
+#include "utils/AngleUtils.h"
 #define _USE_MATH_DEFINES
 
 #include "SwerveModule.h"
@@ -11,19 +12,22 @@ using namespace constants::drivetrain;
 
 class SwerveDrive {
 public:
-    SwerveDrive(bool fieldCentric) : 
+    SwerveDrive() : 
     frontRight(std::make_unique<SwerveModule>(constants::ports::FRONT_RIGHT_PORTS[0], constants::ports::FRONT_RIGHT_PORTS[1])),
     frontLeft(std::make_unique<SwerveModule>(constants::ports::FRONT_LEFT_PORTS[0], constants::ports::FRONT_LEFT_PORTS[1])),
     backLeft(std::make_unique<SwerveModule>(constants::ports::BACK_LEFT_PORTS[0], constants::ports::BACK_LEFT_PORTS[1])),
-    backRight(std::make_unique<SwerveModule>(constants::ports::BACK_RIGHT_PORTS[0], constants::ports::BACK_RIGHT_PORTS[1])),
-    fieldCentric(fieldCentric) {
+    backRight(std::make_unique<SwerveModule>(constants::ports::BACK_RIGHT_PORTS[0], constants::ports::BACK_RIGHT_PORTS[1])) {
         frontRight->setPID(constants::drivetrain::FRONT_RIGHT_PID);
         frontLeft->setPID(constants::drivetrain::FRONT_LEFT_PID);
         backLeft->setPID(constants::drivetrain::BACK_LEFT_PID);
         backRight->setPID(constants::drivetrain::BACK_RIGHT_PID);
+
+        controller.setCommandCallback([this](double forward, double strafe, double rotation) {
+            setModuleSpeeds(forward, strafe, rotation);
+        });
     }
 
-    void setModuleSpeeds(double forward, double strafe, double rotation) {
+    void setModuleSpeeds(double forward, double strafe, double rotation, bool fieldCentric = true) {
         if (fieldCentric) {
             double angle = AngleUtils::toRadians(constants::drivetrain::IMU.get_rotation());
             double newStrafe = strafe * cos(angle) - forward * sin(angle);
@@ -44,10 +48,25 @@ public:
     }
 
     void update() {
+        if (autonomous) {
+            Pose2D currentPose = getPose();
+            TrajectoryPoint targetPoint = {currentPose, {0, 0}};
+            controller.update(currentPose, targetPoint);
+        }
+
         frontRight->update();
         frontLeft->update();
         backLeft->update();
         backRight->update();
+    }
+
+    void setAutonomous(bool autonomous) {
+        this->autonomous = autonomous;
+    }
+
+    Pose2D getPose() {
+        // placeholder for actual pose estimation logic
+        return Pose2D{0, 0, 0};
     }
 
     void tareIMU() {
@@ -56,7 +75,6 @@ public:
 
 private:
     std::unique_ptr<SwerveModule> frontRight, frontLeft, backLeft, backRight;
-    bool fieldCentric;
     bool autonomous = false;
 
     HolonomicController controller{0.5, 0.5};
