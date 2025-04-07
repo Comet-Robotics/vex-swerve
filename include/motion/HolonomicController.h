@@ -22,7 +22,7 @@ public:
     HolonomicController(double kP_xy, double kP_theta)
         : kP_xy(kP_xy), kP_theta(kP_theta) {}
 
-    void setCommandCallback(std::function<void(double forward, double strafe, double omega)> callback) {
+    void setCommandCallback(std::function<void(double forward, double strafe, double omega, bool fieldCentric)> callback) {
         commandCallback = callback;
     }
 
@@ -55,7 +55,7 @@ public:
         double rotation = correctionTheta;
 
         if (commandCallback) {
-            commandCallback(forward, strafe, rotation);
+            commandCallback(forward, strafe, rotation, false);
         }
 
         logError(currentPose, targetPose);
@@ -64,7 +64,7 @@ public:
 private:
     double kP_xy;
     double kP_theta;
-    std::function<void(double, double, double)> commandCallback;
+    std::function<void(double, double, double, bool)> commandCallback;
 
     void logError(const Pose2D& currentPose, const Pose2D& targetPose) {
         printf("[Tracking] ΔX: %.2f, ΔY: %.2f, Δθ: %.2f\n", 

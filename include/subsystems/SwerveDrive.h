@@ -22,8 +22,8 @@ public:
         backLeft->setPID(constants::drivetrain::BACK_LEFT_PID);
         backRight->setPID(constants::drivetrain::BACK_RIGHT_PID);
 
-        controller.setCommandCallback([this](double forward, double strafe, double rotation) {
-            setModuleSpeeds(forward, strafe, rotation);
+        controller.setCommandCallback([this](double forward, double strafe, double rotation, bool fieldCentric) {
+            setModuleSpeeds(forward, strafe, rotation, fieldCentric);
         });
     }
 
