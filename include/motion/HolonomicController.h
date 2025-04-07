@@ -33,10 +33,10 @@ public:
         double dx = targetPose.x - currentPose.x;
         double dy = targetPose.y - currentPose.y;
 
-        double sinHeading = sin(-currentPose.heading);
-        double cosHeading = cos(-currentPose.heading);
-        double errorX = dx * cosHeading - dy * sinHeading;
-        double errorY = dx * sinHeading + dy * cosHeading;
+        double sinHeading = sin(currentPose.heading);
+        double cosHeading = cos(currentPose.heading);
+        double errorX = dx * cosHeading + dy * sinHeading;
+        double errorY = -dx * sinHeading + dy * cosHeading;
 
         double headingError = targetPose.heading - currentPose.heading;
         headingError = AngleUtils::wrap180(AngleUtils::toRadians(headingError));
@@ -45,10 +45,10 @@ public:
         double correctionY = kP_xy * errorY;
         double correctionTheta = kP_theta * headingError;
 
-        double sinGoal = sin(-targetPose.heading);
-        double cosGoal = cos(-targetPose.heading);
-        double vx = targetVelocity.x * cosGoal - targetVelocity.y * sinGoal;
-        double vy = targetVelocity.x * sinGoal + targetVelocity.y * cosGoal;
+        double sinGoal = sin(targetPose.heading);
+        double cosGoal = cos(targetPose.heading);
+        double vx = targetVelocity.x * cosGoal + targetVelocity.y * sinGoal;
+        double vy = -targetVelocity.x * sinGoal + targetVelocity.y * cosGoal;
 
         double forward = vx + correctionX;
         double strafe = vy + correctionY;
