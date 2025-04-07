@@ -36,10 +36,10 @@ void autonomous()
 
     switch (MODE)
     {
-    case AutonMode::TEST:
-        return autonomousTest();
-    default:
-        break;
+        case AutonMode::TEST:
+            return autonomousTest();
+        default:
+            break;
     }
 };
 

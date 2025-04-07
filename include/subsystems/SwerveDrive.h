@@ -12,6 +12,8 @@ using namespace constants::drivetrain;
 
 class SwerveDrive {
 public:
+    std::unique_ptr<SwerveModule> frontRight, frontLeft, backLeft, backRight;
+
     SwerveDrive() : 
     frontRight(std::make_unique<SwerveModule>(constants::ports::FRONT_RIGHT_PORTS[0], constants::ports::FRONT_RIGHT_PORTS[1])),
     frontLeft(std::make_unique<SwerveModule>(constants::ports::FRONT_LEFT_PORTS[0], constants::ports::FRONT_LEFT_PORTS[1])),
@@ -74,7 +76,6 @@ public:
     }
 
 private:
-    std::unique_ptr<SwerveModule> frontRight, frontLeft, backLeft, backRight;
     bool autonomous = false;
 
     HolonomicController controller{0.5, 0.5};

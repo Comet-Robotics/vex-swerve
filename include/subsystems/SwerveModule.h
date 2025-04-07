@@ -44,6 +44,11 @@ public:
         rotationPID.setCoefficients(coefficients[0], coefficients[1], coefficients[2]);
     }
 
+    void setSpeeds(double topSpeed, double bottomSpeed) {
+        topMotor.move_voltage(topSpeed * 12000);
+        bottomMotor.move_voltage(bottomSpeed * 12000);
+    }
+
     void update() {
         double currentAngle = fmod(getModuleRotation(), 360.0);
         if (currentAngle < 0) currentAngle += 360.0;
