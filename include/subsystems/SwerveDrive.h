@@ -38,10 +38,10 @@ public:
             forward = newForward;
         }
 
-        double a = strafe - rotation * TRACK_LENGTH / 2.0;
-        double b = strafe + rotation * TRACK_LENGTH / 2.0;
-        double c = forward - rotation * TRACK_WIDTH / 2.0;
-        double d = forward + rotation * TRACK_WIDTH / 2.0;
+        double a = strafe - rotation;
+        double b = strafe + rotation;
+        double c = forward - rotation;
+        double d = forward + rotation;
 
         frontRight->setSpeedAndAngle(hypot(b, c), atan2(b, c) * 180.0 / M_PI);
         frontLeft->setSpeedAndAngle(hypot(b, d), atan2(b, d) * 180.0 / M_PI);
