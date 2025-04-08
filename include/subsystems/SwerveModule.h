@@ -2,7 +2,8 @@
 #define __SUBSYSTEMS_SWERVE_MODULE_H__
 
 #include "constants.h"
-#include "api.h"
+#include "pros/motors.hpp"
+#include "utils/MathUtils.h"
 #include "utils/PID.h"
 #include "utils/AngleUtils.h"
 #include <cmath>
@@ -57,11 +58,7 @@ public:
         double topPower = speed + rotationPower;
         double bottomPower = speed - rotationPower;
 
-        double maxPower = fmax(fabs(topPower), fabs(bottomPower));
-        if (maxPower > 1) {
-            topPower /= maxPower;
-            bottomPower /= maxPower;
-        }
+        MathUtils::scaleToUnitRange(topPower, bottomPower);
 
         topMotor.move_voltage(topPower * 12000);
         bottomMotor.move_voltage(bottomPower * 12000);
