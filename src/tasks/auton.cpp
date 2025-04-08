@@ -1,12 +1,8 @@
-#include "pros/misc.h"
-#include "pros/misc.hpp"
 #include "subsystems.h"
 #include "subsystems/SwerveModule.h"
 #include "tasks/auton.h"
 
 using namespace pros;
-
-pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
 enum class AutonMode
 {
