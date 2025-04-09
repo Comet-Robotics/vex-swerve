@@ -25,20 +25,12 @@ public:
         return ROTATION_FACTOR * (topMotor.get_position() - bottomMotor.get_position());
     }
 
-    void setSpeed(double speed) {
-        this->speed = speed;
-    }
-
-    void setAngle(double angle) {
-        this->angle = angle;
-    }
-
     void setSpeedAndAngle(double targetSpeed, double targetAngle) {
         double currentAngle = getModuleRotation();
         AngleUtils::optimizeAngleAndSpeed(currentAngle, targetAngle, targetSpeed);
 
-        setSpeed(targetSpeed);
-        setAngle(targetAngle);
+        speed = targetSpeed;
+        angle = targetAngle;
     }
 
     void setPID(const std::array<double, 3>& coefficients) {
