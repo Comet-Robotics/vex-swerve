@@ -45,7 +45,7 @@ public:
     void update() {
         double currentAngle = fmod(getModuleRotation(), 360.0);
         if (currentAngle < 0) currentAngle += 360.0;
-        double rotationPower = rotationPID.calculate(currentAngle, angle);
+        double rotationPower = rotationPID.calculate(AngleUtils::shortestAngleDelta(currentAngle, angle));
 
         double topPower = speed + rotationPower;
         double bottomPower = speed - rotationPower;

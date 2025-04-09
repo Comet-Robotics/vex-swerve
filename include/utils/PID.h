@@ -28,9 +28,13 @@ public:
 
     double calculate(double current, double target)
     {
+        double error = target - current;
+        return calculate(error);
+    }
+
+    double calculate(double error) {
         using namespace std::chrono;
 
-        double error = target - current;
         auto now = high_resolution_clock::now();
         double dt = duration<double>(now - lastTime).count();
         lastTime = now;
