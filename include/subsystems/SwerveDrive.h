@@ -78,7 +78,7 @@ public:
 private:
     bool autonomous = false;
 
-    HolonomicController controller{0.5, 0.5};
+    HolonomicController controller{X_PID, Y_PID, THETA_PID};
 };
 
 #endif

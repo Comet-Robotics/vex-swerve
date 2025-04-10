@@ -62,6 +62,22 @@ namespace constants {
             0.0, 
             0.0
         };
+
+        constexpr std::array<double, 3> X_PID = {
+            0.0, 
+            0.0, 
+            0.0
+        };
+        constexpr std::array<double, 3> Y_PID = {
+            0.0, 
+            0.0, 
+            0.0
+        };
+        constexpr std::array<double, 3> THETA_PID = {
+            0.0, 
+            0.0, 
+            0.0
+        };
     }
 
     constexpr int TELEOP_POLL_TIME = 20; // milliseconds

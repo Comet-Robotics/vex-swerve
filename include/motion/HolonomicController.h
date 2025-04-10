@@ -2,6 +2,8 @@
 #define HOLONOMIC_CONTROLLER_H
 
 #include "utils/AngleUtils.h"
+#include "utils/PID.h"
+#include <array>
 #include <cmath>
 #include <cstdio>
 #include <functional>
@@ -19,8 +21,12 @@ struct TrajectoryPoint {
 
 class HolonomicController {
 public:
-    HolonomicController(double kP_xy, double kP_theta)
-        : kP_xy(kP_xy), kP_theta(kP_theta) {}
+    HolonomicController(std::array<double, 3> xPIDCoefficients, 
+                        std::array<double, 3> yPIDCoefficients, 
+                        std::array<double, 3> thetaPIDCoefficients)
+        : xPID(xPIDCoefficients[0], xPIDCoefficients[1], xPIDCoefficients[2]),
+          yPID(yPIDCoefficients[0], yPIDCoefficients[1], yPIDCoefficients[2]),
+          thetaPID(thetaPIDCoefficients[0], thetaPIDCoefficients[1], thetaPIDCoefficients[2]) {}
 
     void setCommandCallback(std::function<void(double forward, double strafe, double omega, bool fieldCentric)> callback) {
         commandCallback = callback;
@@ -37,13 +43,11 @@ public:
         double cosHeading = cos(currentPose.heading);
         double errorX = dx * cosHeading + dy * sinHeading;
         double errorY = -dx * sinHeading + dy * cosHeading;
+        double errorTheta = AngleUtils::shortestAngleDelta(currentPose.heading, targetPose.heading);
 
-        double headingError = targetPose.heading - currentPose.heading;
-        headingError = AngleUtils::wrap180(AngleUtils::toRadians(headingError));
-
-        double correctionX = kP_xy * errorX;
-        double correctionY = kP_xy * errorY;
-        double correctionTheta = kP_theta * headingError;
+        double correctionX = xPID.calculate(errorX);
+        double correctionY = yPID.calculate(errorY);
+        double correctionTheta = thetaPID.calculate(errorTheta);
 
         double sinGoal = sin(targetPose.heading);
         double cosGoal = cos(targetPose.heading);
@@ -62,8 +66,7 @@ public:
     }
 
 private:
-    double kP_xy;
-    double kP_theta;
+    PID xPID, yPID, thetaPID;
     std::function<void(double, double, double, bool)> commandCallback;
 
     void logError(const Pose2D& currentPose, const Pose2D& targetPose) {
