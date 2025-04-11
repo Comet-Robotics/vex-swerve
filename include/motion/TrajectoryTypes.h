@@ -16,6 +16,6 @@ struct TrajectoryPoint {
     double t;
 };
 
-} // namespace Trajectory
+}
 
 #endif
