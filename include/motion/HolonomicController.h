@@ -7,17 +7,8 @@
 #include <cmath>
 #include <cstdio>
 #include <functional>
-
-struct Pose2D {
-    double x;
-    double y;
-    double heading;
-};
-
-struct TrajectoryPoint {
-    Pose2D pose;
-    Pose2D velocity;
-};
+#include <tuple>
+#include "TrajectoryTypes.h"
 
 class HolonomicController {
 public:
@@ -32,9 +23,9 @@ public:
         commandCallback = callback;
     }
 
-    void update(const Pose2D& currentPose, const TrajectoryPoint& target) {
-        Pose2D targetPose = target.pose;
-        Pose2D targetVelocity = target.velocity;
+    std::tuple<double, double, double> update(const Motion::Pose2D& currentPose, const Motion::TrajectoryPoint& target) {
+        Motion::Pose2D targetPose = target.pose;
+        Motion::Pose2D targetVelocity = target.velocity;
 
         double dx = targetPose.x - currentPose.x;
         double dy = targetPose.y - currentPose.y;
@@ -58,18 +49,16 @@ public:
         double strafe = vy + correctionY;
         double rotation = correctionTheta;
 
-        if (commandCallback) {
-            commandCallback(forward, strafe, rotation, false);
-        }
-
         logError(currentPose, targetPose);
+
+        return std::make_tuple(forward, strafe, rotation);
     }
 
 private:
     PID xPID, yPID, thetaPID;
     std::function<void(double, double, double, bool)> commandCallback;
 
-    void logError(const Pose2D& currentPose, const Pose2D& targetPose) {
+    void logError(const Motion::Pose2D& currentPose, const Motion::Pose2D& targetPose) {
         printf("[Tracking] ΔX: %.2f, ΔY: %.2f, Δθ: %.2f\n", 
                targetPose.x - currentPose.x, 
                targetPose.y - currentPose.y, 

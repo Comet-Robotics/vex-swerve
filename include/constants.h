@@ -1,3 +1,6 @@
+#ifndef CONSTANTS_H
+#define CONSTANTS_H
+
 #include <cstdint>
 #include <array>
 #include "pros/imu.hpp"
@@ -80,5 +83,11 @@ namespace constants {
         };
     }
 
+    namespace autonomous {
+        constexpr double TIME_TOLERANCE = 0.05; // seconds
+    }
+
     constexpr int TELEOP_POLL_TIME = 20; // milliseconds
 }
+
+#endif

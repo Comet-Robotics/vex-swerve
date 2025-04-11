@@ -45,6 +45,11 @@ namespace AngleUtils {
         return radians * 180.0 / M_PI;
     }
 
+    inline double lerpAngle(double a, double b, double t) {
+        double delta = shortestAngleDelta(a, b);
+        return wrap360(a + t * delta);
+    }
+
 }
 
 #endif

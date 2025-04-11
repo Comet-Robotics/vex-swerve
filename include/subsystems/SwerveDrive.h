@@ -7,6 +7,7 @@
 #include "SwerveModule.h"
 #include <cmath>
 #include "motion/HolonomicController.h"
+#include "motion/TrajectoryFollower.h"
 
 using namespace constants::drivetrain;
 
@@ -51,9 +52,10 @@ public:
 
     void update() {
         if (autonomous) {
-            Pose2D currentPose = getPose();
-            TrajectoryPoint targetPoint = {currentPose, {0, 0}};
-            controller.update(currentPose, targetPoint);
+            Motion::Pose2D currentPose = getPose();
+            Motion::TrajectoryPoint targetPoint = follower.update(currentPose);
+            auto commands = controller.update(currentPose, targetPoint);
+            setModuleSpeeds(std::get<0>(commands), std::get<1>(commands), std::get<2>(commands), true);
         }
 
         frontRight->update();
@@ -66,9 +68,9 @@ public:
         this->autonomous = autonomous;
     }
 
-    Pose2D getPose() {
+    Motion::Pose2D getPose() {
         // placeholder for actual pose estimation logic
-        return Pose2D{0, 0, 0};
+        return Motion::Pose2D{0, 0, 0};
     }
 
     void tareIMU() {
@@ -77,6 +79,7 @@ public:
 
 private:
     bool autonomous = false;
+    TrajectoryFollower follower{Motion::Trajectory(), constants::autonomous::TIME_TOLERANCE};
 
     HolonomicController controller{X_PID, Y_PID, THETA_PID};
 };
