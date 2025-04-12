@@ -2,7 +2,6 @@
 #define __SUBSYSTEMS_SWERVE_DRIVE_H__
 
 #include "utils/AngleUtils.h"
-#define _USE_MATH_DEFINES
 
 #include "SwerveModule.h"
 #include <cmath>
