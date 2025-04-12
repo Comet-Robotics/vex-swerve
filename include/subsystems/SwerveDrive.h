@@ -44,10 +44,10 @@ public:
         double c = forward - rotation;
         double d = forward + rotation;
 
-        frontRight->setSpeedAndAngle(hypot(b, c), atan2(b, c) * 180.0 / M_PI);
-        frontLeft->setSpeedAndAngle(hypot(b, d), atan2(b, d) * 180.0 / M_PI);
-        backLeft->setSpeedAndAngle(hypot(a, d), atan2(a, d) * 180.0 / M_PI);
-        backRight->setSpeedAndAngle(hypot(a, c), atan2(a, c) * 180.0 / M_PI);
+        frontRight->setSpeedAndAngle(hypot(b, c), AngleUtils::toDegrees(atan2(b, c)));
+        frontLeft->setSpeedAndAngle(hypot(b, d), AngleUtils::toDegrees(atan2(b, d)));
+        backLeft->setSpeedAndAngle(hypot(a, d), AngleUtils::toDegrees(atan2(a, d)));
+        backRight->setSpeedAndAngle(hypot(a, c), AngleUtils::toDegrees(atan2(a, c)));
     }
 
     void update() {
