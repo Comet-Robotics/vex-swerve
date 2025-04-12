@@ -1,5 +1,4 @@
 #include "subsystems.h"
-#include "subsystems/SwerveModule.h"
 #include "tasks/auton.h"
 
 using namespace pros;
