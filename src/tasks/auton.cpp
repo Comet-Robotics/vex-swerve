@@ -26,6 +26,14 @@ void autonomousTest()
     }
 }
 
+void autonomousTest2()
+{
+    drivebase->setTrajectory("paths/testPath.traj");
+    while (!drivebase->atEnd()) {
+        drivebase->update();
+    }
+}
+
 void autonomous()
 {
     drivebase->setAutonomous(true);

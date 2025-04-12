@@ -77,10 +77,27 @@ public:
         constants::drivetrain::IMU.tare();
     }
 
+    void setTrajectory(const Motion::Trajectory& trajectory) {
+        follower.reset(trajectory);
+    }
+
+    void setTrajectory(const std::string& filename) {
+        try {
+            Motion::Trajectory trajectory = Motion::Trajectory::fromFile(filename);
+            setTrajectory(trajectory);
+        } catch (const std::exception& e) {
+            printf("Failed to load trajectory: %s\n", e.what());
+        }
+    }
+
+    bool atEnd() const {
+        return follower.isFinished();
+    }
+
 private:
     bool autonomous = false;
-    TrajectoryFollower follower{Motion::Trajectory(), constants::autonomous::TIME_TOLERANCE};
 
+    TrajectoryFollower follower{Motion::Trajectory(), constants::autonomous::TIME_TOLERANCE};
     HolonomicController controller{X_PID, Y_PID, THETA_PID};
 };
 
