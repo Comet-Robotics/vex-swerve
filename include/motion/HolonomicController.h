@@ -7,7 +7,8 @@
 #include <cstdio>
 #include <functional>
 #include <tuple>
-#include "TrajectoryTypes.h"
+#include "types/Pose2D.h"
+#include "types/TrajectoryPoint.h"
 
 class HolonomicController {
 public:
@@ -22,9 +23,9 @@ public:
         commandCallback = callback;
     }
 
-    std::tuple<double, double, double> update(const Motion::Pose2D& currentPose, const Motion::TrajectoryPoint& target) {
-        Motion::Pose2D targetPose = target.pose;
-        Motion::Pose2D targetVelocity = target.velocity;
+    std::tuple<double, double, double> update(const Pose2D& currentPose, const TrajectoryPoint& target) {
+        Pose2D targetPose = target.pose;
+        Pose2D targetVelocity = target.velocity;
 
         double dx = targetPose.x - currentPose.x;
         double dy = targetPose.y - currentPose.y;
@@ -57,7 +58,7 @@ private:
     PID xPID, yPID, thetaPID;
     std::function<void(double, double, double, bool)> commandCallback;
 
-    void logError(const Motion::Pose2D& currentPose, const Motion::Pose2D& targetPose) {
+    void logError(const Pose2D& currentPose, const Pose2D& targetPose) {
         printf("[Tracking] ΔX: %.2f, ΔY: %.2f, Δθ: %.2f\n", 
                targetPose.x - currentPose.x, 
                targetPose.y - currentPose.y, 

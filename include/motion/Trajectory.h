@@ -1,12 +1,10 @@
 #pragma once
 
 #include <stdexcept>
-#include <vector>
 #include <string>
-#include "TrajectoryTypes.h"
+#include "types/TrajectoryPoint.h"
+#include "types/Pose2D.h"
 #include "simdjson/simdjson.h"
-
-namespace Motion {
 
 class Trajectory {
 public:
@@ -27,7 +25,7 @@ public:
         Trajectory trajectory;
 
         for (auto sample : samples) {
-            Motion::TrajectoryPoint point;
+            TrajectoryPoint point;
             
             point.t = double(sample["t"]);
 
@@ -45,11 +43,11 @@ public:
         return trajectory;
     }
 
-    void addPoint(Motion::TrajectoryPoint point) {
+    void addPoint(TrajectoryPoint point) {
         points.emplace_back(point);
     }
 
-    const std::vector<Motion::TrajectoryPoint>& getPoints() const {
+    const std::vector<TrajectoryPoint>& getPoints() const {
         return points;
     }
 
@@ -58,7 +56,5 @@ public:
     }
 
 private:
-    std::vector<Motion::TrajectoryPoint> points;
+    std::vector<TrajectoryPoint> points;
 };
-
-}
