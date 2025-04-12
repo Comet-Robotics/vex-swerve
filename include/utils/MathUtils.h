@@ -1,5 +1,4 @@
-#ifndef MATH_UTILS_H
-#define MATH_UTILS_H
+#pragma once
 
 #include "motion/TrajectoryTypes.h"
 #include "motion/Trajectory.h"
@@ -58,5 +57,3 @@ namespace MathUtils {
         return points.back();
     }
 }
-
-#endif // MATH_UTILS_H

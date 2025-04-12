@@ -1,5 +1,4 @@
-#ifndef __SUBSYSTEMS_SWERVE_MODULE_H__
-#define __SUBSYSTEMS_SWERVE_MODULE_H__
+#pragma once
 
 #include "constants.h"
 #include "pros/motors.hpp"
@@ -64,5 +63,3 @@ private:
     double speed = 0;
     double angle = 0;
 };
-
-#endif

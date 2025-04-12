@@ -1,6 +1,4 @@
-// TrajectoryTypes.h
-#ifndef TRAJECTORY_TYPES_H
-#define TRAJECTORY_TYPES_H
+#pragma once
 
 namespace Motion {
 
@@ -17,5 +15,3 @@ struct TrajectoryPoint {
 };
 
 }
-
-#endif

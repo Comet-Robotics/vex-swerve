@@ -1,6 +1,6 @@
-#ifndef __SUBSYSTEMS_SWERVE_DRIVE_H__
-#define __SUBSYSTEMS_SWERVE_DRIVE_H__
+#pragma once
 
+#include "motion/TrajectoryTypes.h"
 #include "utils/AngleUtils.h"
 
 #include "SwerveModule.h"
@@ -27,6 +27,8 @@ public:
         controller.setCommandCallback([this](double forward, double strafe, double rotation, bool fieldCentric) {
             setModuleSpeeds(forward, strafe, rotation, fieldCentric);
         });
+
+        setPose({0, 0, 0});
     }
 
     void setModuleSpeeds(double forward, double strafe, double rotation, bool fieldCentric = true) {
@@ -67,9 +69,12 @@ public:
         this->autonomous = autonomous;
     }
 
+    void setPose(const Motion::Pose2D& pose) {
+        currentPose = pose;
+    }
+
     Motion::Pose2D getPose() {
-        // placeholder for actual pose estimation logic
-        return Motion::Pose2D{0, 0, 0};
+        return currentPose;
     }
 
     void tareIMU() {
@@ -98,6 +103,6 @@ private:
 
     TrajectoryFollower follower{Motion::Trajectory(), constants::autonomous::TIME_TOLERANCE};
     HolonomicController controller{X_PID, Y_PID, THETA_PID};
-};
 
-#endif
+    Motion::Pose2D currentPose;
+};

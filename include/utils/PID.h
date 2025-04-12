@@ -1,5 +1,4 @@
-#ifndef __UTILS_PID_H__
-#define __UTILS_PID_H__
+#pragma once
 
 #include <chrono>
 
@@ -66,5 +65,3 @@ private:
 
     std::chrono::high_resolution_clock::time_point lastTime;
 };
-
-#endif

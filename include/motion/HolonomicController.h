@@ -1,5 +1,4 @@
-#ifndef HOLONOMIC_CONTROLLER_H
-#define HOLONOMIC_CONTROLLER_H
+#pragma once
 
 #include "utils/AngleUtils.h"
 #include "utils/PID.h"
@@ -65,5 +64,3 @@ private:
                targetPose.heading - currentPose.heading);
     }
 };
-
-#endif

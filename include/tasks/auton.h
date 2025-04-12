@@ -1,5 +1,4 @@
-#ifndef __TASKS_AUTON_H__
-#define __TASKS_AUTON_H__
+#pragma once
 
 #ifdef __cplusplus
 extern "C"
@@ -11,6 +10,4 @@ extern "C"
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

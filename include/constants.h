@@ -1,5 +1,4 @@
-#ifndef CONSTANTS_H
-#define CONSTANTS_H
+#pragma once
 
 #include <cstdint>
 #include <array>
@@ -89,5 +88,3 @@ namespace constants {
 
     constexpr int TELEOP_POLL_TIME = 20; // milliseconds
 }
-
-#endif

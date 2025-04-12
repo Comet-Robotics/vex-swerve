@@ -1,5 +1,4 @@
-#ifndef ANGLE_UTILS_H
-#define ANGLE_UTILS_H
+#pragma once
 
 #include <cmath>
 
@@ -51,5 +50,3 @@ namespace AngleUtils {
     }
 
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef __SUBSYSTEMS_H__
-#define __SUBSYSTEMS_H__
+#pragma once
 
 #include "subsystems/SwerveDrive.h"
 
@@ -10,5 +9,3 @@ inline void subsystems_initialize()
 {
     drivebase = new SwerveDrive();
 }
-
-#endif
