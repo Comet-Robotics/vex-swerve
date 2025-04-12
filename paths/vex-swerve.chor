@@ -28,12 +28,12 @@
    }
   },
   "mass":{
-   "exp":"30 lbs",
-   "val":13.6077711
+   "exp":"20 lbs",
+   "val":9.0718474
   },
   "inertia":{
-   "exp":"6 kg m ^ 2",
-   "val":6.0
+   "exp":"8 kg m ^ 2",
+   "val":8.0
   },
   "gearing":{
    "exp":"6",
