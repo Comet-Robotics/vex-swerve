@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <math.h>
 #include "pros/rotation.hpp"
+#include "utils/AngleUtils.h"
 
 class OdometryPod {
 public:
@@ -15,7 +16,7 @@ public:
     }
 
     double getTraveledDistance() const {
-        return sensor.get_position()/100.0 * wheelRadius;
+        return AngleUtils::toRadians(sensor.get_position()/100.0) * wheelRadius;
     }
 
 private:
