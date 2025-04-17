@@ -18,6 +18,8 @@ public:
     bottomMotor(bottomMotorPort, CHASSIS_INTERNAL_GEARSET) {
         topMotor.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
         bottomMotor.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+        topMotor.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
+        bottomMotor.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
     }
 
     double getModuleRotation() const {
