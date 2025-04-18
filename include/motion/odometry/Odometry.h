@@ -1,27 +1,35 @@
 #pragma once
 
-#include "OdometryPod.h"
+#include "TrackingPod.h"
 #include "pros/imu.hpp"
+#include "pros/rtos.hpp"
 #include "types/Pose2D.h"
 #include "utils/AngleUtils.h"
-#include <cstdint>
+#include <cmath>
 
-//TODO: solve the offset problem for the odom pods
 class Odometry {
 public:
-    Odometry(OdometryPod verticalPod, OdometryPod horizontalPod, int8_t imuPort, double wheelDiameter) :
+    Odometry(TrackingPod* verticalPod,
+             TrackingPod* horizontalPod,
+             pros::Imu* imu) :
     verticalPod(verticalPod),
     horizontalPod(horizontalPod),
-    imu(imuPort) {
-        verticalPod.tare();
-        horizontalPod.tare();
-        imu.set_heading(0);
-    }
+    imu(imu) {}
 
     void tare(bool calibrate = false) {
-        verticalPod.tare();
-        horizontalPod.tare();
-        calibrate ? imu.reset() : imu.set_heading(0); // idk if .reset() sets heading to 0
+        verticalPod->tare();
+        horizontalPod->tare();
+        if (calibrate) {
+            imu->reset();
+            while(imu->is_calibrating()) pros::delay(10);
+        }
+        imu->set_heading(0);
+        x = 0.0;
+        y = 0.0;
+        theta = 0.0;
+        lastHDist = 0.0;
+        lastVDist = 0.0;
+        lastTheta = 0.0;
     }
 
     void setPose(double x, double y, double theta) {
@@ -30,32 +38,45 @@ public:
         this->theta = theta;
     }
 
-    Pose2D getPose(bool degrees = true) const {
+    inline Pose2D getPose(bool degrees = true) const {
         return Pose2D{x,
             y,
             getTheta(degrees)
         };
     }
 
-    double getX() const { return x; }
-    double getY() const { return y; }
-    double getTheta(bool degrees = false) const { return degrees ? AngleUtils::toDegrees(theta) : theta; }
+    inline double getX() const { return x; }
+    inline double getY() const { return y; }
+    inline double getTheta(bool degrees = false) const { return degrees ? AngleUtils::toDegrees(theta) : theta; }
 
     void update() {
-        double deltaX = horizontalPod.getTraveledDistance() - lastHDist;
-        double deltaY = verticalPod.getTraveledDistance() - lastVDist;
+        const double currentHDist = horizontalPod->getTraveledDistance();
+        const double currentVDist = verticalPod->getTraveledDistance();
+        const double currentTheta = AngleUtils::toRadians(imu->get_rotation());
 
-        x += deltaX * cos(theta) - deltaY * sin(theta);
-        y += deltaX * sin(theta) + deltaY * cos(theta);
-        theta = AngleUtils::toRadians(AngleUtils::wrap360(imu.get_rotation()));
-        lastHDist = horizontalPod.getTraveledDistance();
-        lastVDist = verticalPod.getTraveledDistance();
+        const double dXRaw = currentHDist - lastHDist;
+        const double dYRaw = currentVDist - lastVDist;
+        const double dTheta = currentTheta - lastTheta;
+
+        const double dX = dXRaw + horizontalPod->getOffset() * dTheta;
+        const double dY = dYRaw - verticalPod->getOffset() * dTheta;
+
+        const double dX_r =  dX * cos(dTheta/2) - dY * sin(dTheta/2);
+        const double dY_r =  dX * sin(dTheta/2) + dY * cos(dTheta/2);
+
+        x += dX_r * cos(theta) - dY_r * sin(theta);
+        y += dX_r * sin(theta) + dY_r * cos(theta);
+        theta = AngleUtils::wrap2Pi(currentTheta);
+
+        lastHDist = horizontalPod->getTraveledDistance();
+        lastVDist = verticalPod->getTraveledDistance();
+        lastTheta = AngleUtils::toRadians(imu->get_rotation());
     }
 
 private:
-    OdometryPod verticalPod;
-    OdometryPod horizontalPod;
-    pros::Imu imu;
+    TrackingPod* verticalPod;
+    TrackingPod* horizontalPod;
+    pros::Imu* imu;
     double x = 0.0, y = 0.0, theta = 0.0;
-    double lastHDist = 0.0, lastVDist = 0.0;
+    double lastHDist = 0.0, lastVDist = 0.0, lastTheta = 0.0;
 };
