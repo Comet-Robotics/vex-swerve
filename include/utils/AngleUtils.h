@@ -4,6 +4,18 @@
 
 namespace AngleUtils {
 
+    inline double wrap2Pi(double angle) {
+        angle = fmod(angle, 2 * M_PI);
+        if (angle < 0) angle += 2 * M_PI;
+        return angle;
+    }
+
+    inline double  wrapPi(double angle) {
+        angle = fmod(angle + M_PI, 2 * M_PI);
+        if (angle < 0) angle += 2 * M_PI;
+        return angle - M_PI;
+    }
+    
     // Wraps an angle to the range [0, 360)
     inline double wrap360(double angle) {
         angle = fmod(angle, 360.0);
